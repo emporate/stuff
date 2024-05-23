@@ -1,0 +1,8 @@
+﻿`::
+send, {i}
+send, {i}
+send, {i}
+send, {Wheelup 1}
+send, {c}
+mouseMove, 0, -35, 2, R
+return
