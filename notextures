@@ -1,0 +1,10 @@
+local function changeMaterialToSmoothPlastic(parent)
+    for _, child in ipairs(parent:GetChildren()) do
+        if child:IsA("BasePart") then
+            child.Material = Enum.Material.SmoothPlastic
+        end
+        changeMaterialToSmoothPlastic(child)
+    end
+end
+
+changeMaterialToSmoothPlastic(workspace)
