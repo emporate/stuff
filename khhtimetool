@@ -1,0 +1,131 @@
+local player = game.Players.LocalPlayer
+
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = player:WaitForChild("PlayerGui")
+
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 400)
+frame.Position = UDim2.new(0.5, -200, 0.5, -200)
+frame.BackgroundColor3 = Color3.fromRGB(128, 128, 128)
+frame.Active = true
+frame.Draggable = true
+frame.Parent = screenGui
+
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, 0, 0, 30)
+titleLabel.Position = UDim2.new(0, 0, 0, 0)
+titleLabel.BackgroundTransparency = 1
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextStrokeTransparency = 0
+titleLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+titleLabel.Font = Enum.Font.SourceSansBold
+titleLabel.TextSize = 18
+titleLabel.Text = "Total Time:"
+titleLabel.Parent = frame
+
+local timeLabel = Instance.new("TextLabel")
+timeLabel.Size = UDim2.new(1, 0, 0, 30)
+timeLabel.Position = UDim2.new(0, 0, 0, 30)
+timeLabel.BackgroundTransparency = 1
+timeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+timeLabel.TextStrokeTransparency = 0
+timeLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+timeLabel.Font = Enum.Font.SourceSansBold
+timeLabel.TextSize = 18
+timeLabel.Text = ""
+timeLabel.Parent = frame
+
+local totalGainedLabel = Instance.new("TextLabel")
+totalGainedLabel.Size = UDim2.new(1, 0, 0, 30)
+totalGainedLabel.Position = UDim2.new(0, 0, 0, 70)
+totalGainedLabel.BackgroundTransparency = 1
+totalGainedLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+totalGainedLabel.TextStrokeTransparency = 0
+totalGainedLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+totalGainedLabel.Font = Enum.Font.SourceSansBold
+totalGainedLabel.TextSize = 18
+totalGainedLabel.Text = "Total Gained Time:"
+totalGainedLabel.Parent = frame
+
+local totalGainedTimeLabel = Instance.new("TextLabel")
+totalGainedTimeLabel.Size = UDim2.new(1, 0, 0, 30)
+totalGainedTimeLabel.Position = UDim2.new(0, 0, 0, 100)
+totalGainedTimeLabel.BackgroundTransparency = 1
+totalGainedTimeLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+totalGainedTimeLabel.TextStrokeTransparency = 0
+totalGainedTimeLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+totalGainedTimeLabel.Font = Enum.Font.SourceSansBold
+totalGainedTimeLabel.TextSize = 18
+totalGainedTimeLabel.Text = ""
+totalGainedTimeLabel.Parent = frame
+
+local totalTimeInGameLabel = Instance.new("TextLabel")
+totalTimeInGameLabel.Size = UDim2.new(1, 0, 0, 30)
+totalTimeInGameLabel.Position = UDim2.new(0, 0, 0, 130)
+totalTimeInGameLabel.BackgroundTransparency = 1
+totalTimeInGameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+totalTimeInGameLabel.TextStrokeTransparency = 0
+totalTimeInGameLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+totalTimeInGameLabel.Font = Enum.Font.SourceSansBold
+totalTimeInGameLabel.TextSize = 18
+totalTimeInGameLabel.Text = "Total Time in Game:"
+totalTimeInGameLabel.Parent = frame
+
+local totalTimeInGameValueLabel = Instance.new("TextLabel")
+totalTimeInGameValueLabel.Size = UDim2.new(1, 0, 0, 30)
+totalTimeInGameValueLabel.Position = UDim2.new(0, 0, 0, 160)
+totalTimeInGameValueLabel.BackgroundTransparency = 1
+totalTimeInGameValueLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+totalTimeInGameValueLabel.TextStrokeTransparency = 0
+totalTimeInGameValueLabel.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
+totalTimeInGameValueLabel.Font = Enum.Font.SourceSansBold
+totalTimeInGameValueLabel.TextSize = 18
+totalTimeInGameValueLabel.Text = "00:00:00"
+totalTimeInGameValueLabel.Parent = frame
+
+local initialTotalTime = player.leaderstats.Minutes.Value
+
+local function updateTime()
+    local currentTotalTime = player.leaderstats.Minutes.Value
+    local totalGainedTime = currentTotalTime - initialTotalTime
+    
+    timeLabel.Text = string.format("%d minutes", currentTotalTime)
+    totalGainedTimeLabel.Text = string.format("%d minutes", totalGainedTime)
+end
+
+updateTime()
+
+player.leaderstats.Minutes.Changed:Connect(updateTime)
+
+local function formatTime(seconds)
+    local hours = math.floor(seconds / 3600)
+    local minutes = math.floor((seconds % 3600) / 60)
+    local seconds = seconds % 60
+    return string.format("%02d:%02d:%02d", hours, minutes, seconds)
+end
+
+local startTime = tick()
+local function updateTotalTimeInGame()
+    while true do
+        local elapsedTime = tick() - startTime
+        totalTimeInGameValueLabel.Text = formatTime(math.floor(elapsedTime))
+        wait(1)
+    end
+end
+
+spawn(updateTotalTimeInGame)
+
+local antiAfkButton = Instance.new("TextButton")
+antiAfkButton.Size = UDim2.new(0, 150, 0, 30)
+antiAfkButton.Position = UDim2.new(0.5, -75, 1, -40)
+antiAfkButton.AnchorPoint = Vector2.new(0.5, 1)
+antiAfkButton.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+antiAfkButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+antiAfkButton.Font = Enum.Font.SourceSansBold
+antiAfkButton.TextSize = 18
+antiAfkButton.Text = "Anti-AFK"
+antiAfkButton.Parent = frame
+
+antiAfkButton.MouseButton1Click:Connect(function()
+    loadstring(game:HttpGet(('https://raw.githubusercontent.com/RTrade/Voidz/main/AntiAFK.lua'),true))()
+end)
